@@ -1,23 +1,24 @@
-import logo from './logo.svg';
 import './App.css';
+import LocationInput from './components/LocationInput';
+import Businesses from './components/Businesses'
+import { useState } from 'react'
 
 function App() {
+  const [businesses, setBusinesses] = useState([])
+
+  //on submit pass location and make http call to yelp api
+  const submitLocation = async (location) => {
+    const url = `http://localhost:8000/bad_parking/${location}`;
+    const response = await fetch(url)
+    const data = await response.json()
+
+    setBusinesses(data.businesses)
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <LocationInput submitLocation={submitLocation}/>
+      <Businesses businesData={businesses}/>
     </div>
   );
 }
